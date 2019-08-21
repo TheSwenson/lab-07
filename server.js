@@ -57,7 +57,8 @@ app.get('/weather', (request, response) => {
       } 
       
 });
-app.get('/event', (request, response) => {
+app.get('/events', (request, response) => {
+  console.log('Workin');
   try {
     const url = `https://www.eventbriteapi.com/v3/events/search/?token=${process.env.EVENTBRITE_API_KEY}&location.latitude=${request.query.data.latitude}&location.longitude=${request.query.data.longitude}&location.within=10km`;
 
