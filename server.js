@@ -28,26 +28,22 @@ function Location(query, geoData){
   this.longitude = geoData.results[0].geometry.location.lng;
 }
 
-function Weather(weatherData, i) {
-  this.forecast = weatherData.daily.data[i].summary;
-  this.time = convertTime();
-  function convertTime() {
-    return new Date(weatherData.daily.data[i].time * 1000).toString().split(' ').slice(0, 4).join(' ');
+function Weather(day) {
+  this.forecast = day.summary;
+  this.time = this.time = new Date(day.time * 1000).toString().slice(0, 15);
   }
-}
+
 
 app.get('/weather', (request, response) => {
   try {
     const url = `https://api.darksky.net/forecast/${process.env.DARKSKYAPI_KEY}/${request.query.data.latitude},${request.query.data.longitude}`;
 
     return superagent.get(url)
-      .then(result => {
-        const weatherSummaries = result.body.daily.data.map(day => {
-          return new Weather(day);
+      .then((result) => {
+        const weatherSummaries = result.body.daily.data.map((day) => new Weather(day));
+          response.send(weatherSummaries);
         });
-        response.send(weatherSummaries);
-      })
-
+        
       } catch(error) {
           response.status(500).send('Dis website is broke. Call someone who cares.');
       } 
