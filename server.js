@@ -59,7 +59,7 @@ app.get('/weather', (request, response) => {
 });
 app.get('/event', (request, response) => {
   try {
-    const url = `https://www.eventbriteapi.com/v3/events/search/?token=${process.env.EVENTBRITE_API_KEY}&location.latitude=${request.query.data.latitude}&location.longitude=${request.query.data.longitude}&location.within=15km`;
+    const url = `https://www.eventbriteapi.com/v3/events/search/?token=${process.env.EVENTBRITE_API_KEY}&location.latitude=${request.query.data.latitude}&location.longitude=${request.query.data.longitude}&location.within=10km`;
 
     return superagent.get(url)
       .then((result) => {
