@@ -28,9 +28,17 @@ function Location(query, geoData){
   this.longitude = geoData.results[0].geometry.location.lng;
 }
 
+function Event(eventData) {
+  this.link = eventData.url;
+  this.name = eventData.name.text;
+  this.event_date = eventData.url;
+  this.summary = eventData.description.text;
+};
+
 function Weather(day) {
   this.forecast = day.summary;
-  this.time = this.time = new Date(day.time * 1000).toString().slice(0, 15);
+  this.time = new Date(day.time * 1000).toString().slice(0, 15);
+
   }
 
 
@@ -49,6 +57,21 @@ app.get('/weather', (request, response) => {
       } 
       
 });
+app.get('/event', (request, response) => {
+  try {
+    const url = `https://www.eventbriteapi.com/v3/events/search/?token=${process.env.EVENTBRITE_API_KEY}&location.latitude=${request.query.data.latitude}&location.longitude=${request.query.data.longitude}&location.within=15km`;
+
+    return superagent.get(url)
+      .then((result) => {
+        const eventSummaries = result.body.daily.data.map((event) => new Event(event));
+          response.send(eventSummaries);
+        });
+        
+      } catch(error) {
+          response.status(500).send('Shit\'s on fire yo.');
+      } 
+});
+      
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
