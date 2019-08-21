@@ -63,7 +63,7 @@ app.get('/event', (request, response) => {
 
     return superagent.get(url)
       .then((result) => {
-        const eventSummaries = result.body.daily.data.map((event) => new Event(event));
+        const eventSummaries = result.body.events.map((event) => new Event(event));
           response.send(eventSummaries);
         });
         
